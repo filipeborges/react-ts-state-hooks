@@ -1,7 +1,34 @@
 import React from 'react';
 
-export interface IStateContext {
+export interface RedditState {
+  isFetching: boolean;
+  fetchResult?: {
+    success?: {
+      fetchedAt: number;
+      subreddits: { title: string; url: string; }[];
+    }
+    errorMsg?: string;
+  }
+}
+
+export interface RedditAction {
+  type: string;
+  reddit: RedditState;
+}
+
+export interface CounterState {
   count: number;
+}
+
+export interface CounterAction {
+  type: string;
+}
+
+export type IDispatchAction = RedditAction | CounterAction;
+
+export interface IStateContext {
+  reddit: RedditState;
+  counter: CounterState;
 }
 
 export interface IAppContext {
@@ -10,10 +37,6 @@ export interface IAppContext {
 
 export interface IStateReducer {
   (state: IStateContext, action: IDispatchAction): IStateContext;
-}
-
-export interface IDispatchAction {
-  type: string;
 }
 
 export interface IStateProvider {

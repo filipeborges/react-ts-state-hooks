@@ -18,7 +18,7 @@ export default (props: IDisplayNumberProps) => {
     state && dispatch &&
     <div>
       <div style={props.center ? centerStyle : undefined}>
-        <label>{state.count}</label>
+        <label>{state.counter.count}</label>
       </div>
       <div style={props.center ? centerStyle : undefined}>
         <button onClick={() => dispatch(increment)}>+</button>

@@ -1,11 +1,19 @@
-import { IStateReducer, IStateContext } from './types'
+import {
+  IStateContext,
+  RedditState,
+  RedditAction,
+  CounterState,
+  CounterAction,
+  IStateReducer
+} from './types'
 import { ACTIONS } from './actions';
 
 export const initialStateCtx: IStateContext = {
-  count: 0
+  counter: { count: 0 },
+  reddit: { isFetching: false, fetchResult: {} }
 };
 
-export const reducer : IStateReducer = (state, action) => {
+const counter = (state: CounterState, action: CounterAction): CounterState => {
   switch (action.type) {
     case ACTIONS.INCREMENT:
       return { count: state.count + 1 };
@@ -15,3 +23,26 @@ export const reducer : IStateReducer = (state, action) => {
       return state;
   }
 };
+
+const reddit = (state: RedditState, action: RedditAction): RedditState => {
+  switch (action.type) {
+    case ACTIONS.REDDIT_FETCH_START:
+      return {
+        isFetching: action.reddit.isFetching,
+        fetchResult: undefined
+      };
+    case ACTIONS.REDDIT_FETCH_FAIL:
+    case ACTIONS.REDDIT_FETCH_SUCCESS:
+      return {
+        isFetching: action.reddit.isFetching,
+        fetchResult: action.reddit.fetchResult
+      }
+    default:
+      return state;
+  }
+};
+
+export const rootReducer: IStateReducer = (state, action) => ({
+  counter: counter(state.counter, <CounterAction>action),
+  reddit: reddit(state.reddit, <RedditAction>action)
+});
